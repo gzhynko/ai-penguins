@@ -8,7 +8,7 @@ crate-type = ["cdylib"]
 
 [dependencies]
 godot = { git = "https://github.com/godot-rust/gdext", branch = "master", features = ["experimental-threads"] }
-rust-llm-server-common = { path = "external/rust-llm-server-common" }
+rust-llm-server-common = { git = "https://github.com/gzhynko/rust-llm-server" }
 rand = "0.8.5"
 message-io = "0.18.1"
 bincode = "1.3.1"
