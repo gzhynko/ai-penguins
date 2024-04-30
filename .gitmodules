@@ -1,3 +1,0 @@
-[submodule "external/llm"]
-	path = external/llm
-	url = https://github.com/rustformers/llm.git
