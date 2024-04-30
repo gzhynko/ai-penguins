@@ -1,0 +1,536 @@
+[gd_scene load_steps=25 format=3 uid="uid://bb4xxfl0gh2ey"]
+
+[ext_resource type="Script" path="res://Scripts/UI/inference_stats_charts_container.gd" id="1_j55vy"]
+[ext_resource type="Script" path="res://Scripts/UI/3d_scene_display.gd" id="1_pljof"]
+[ext_resource type="LabelSettings" uid="uid://b2348qexkpbqp" path="res://UI/section_label_settings.tres" id="2_q71cg"]
+[ext_resource type="PackedScene" uid="uid://bgvq4gnumxeg6" path="res://addons/easy_charts/control_charts/chart.tscn" id="3_6g0mc"]
+[ext_resource type="Script" path="res://Scripts/UI/current_topic_gen_state_container.gd" id="4_6hu1a"]
+[ext_resource type="Script" path="res://Scripts/UI/controls_container.gd" id="4_28vps"]
+[ext_resource type="Script" path="res://Scripts/UI/current_tts_state_container.gd" id="5_83v4c"]
+[ext_resource type="Script" path="res://Scripts/UI/curr_state_general_state_container.gd" id="5_cmlc3"]
+[ext_resource type="Script" path="res://Scripts/UI/text_gen_enqueued_container.gd" id="5_hg1v2"]
+[ext_resource type="Script" path="res://Scripts/UI/topics_ready_for_tts_container.gd" id="6_37uhp"]
+[ext_resource type="Script" path="res://Scripts/UI/topics_ready_for_present_container.gd" id="7_7jc5e"]
+[ext_resource type="Script" path="res://Scripts/UI/present_queue_container.gd" id="8_qt81x"]
+[ext_resource type="PackedScene" uid="uid://dsqlojp8ry45x" path="res://Scenes/voice_line_container.tscn" id="10_760q5"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fith2"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6r7h2"]
+bg_color = Color(0, 0, 0, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kudbm"]
+bg_color = Color(0.160784, 0.160784, 0.160784, 0.780392)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fwktw"]
+bg_color = Color(0, 0, 0, 0)
+
+[sub_resource type="Theme" id="Theme_khyp4"]
+ItemList/colors/font_color = Color(1, 1, 1, 1)
+ItemList/styles/focus = SubResource("StyleBoxEmpty_fith2")
+ItemList/styles/panel = SubResource("StyleBoxFlat_6r7h2")
+LineEdit/colors/font_uneditable_color = Color(0.87451, 0.87451, 0.87451, 1)
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_kudbm")
+TextEdit/colors/font_readonly_color = Color(1, 1, 1, 1)
+TextEdit/styles/read_only = SubResource("StyleBoxFlat_fwktw")
+
+[sub_resource type="LabelSettings" id="LabelSettings_07s2n"]
+font_size = 25
+
+[sub_resource type="LabelSettings" id="LabelSettings_sny16"]
+font_size = 20
+
+[sub_resource type="LabelSettings" id="LabelSettings_wqpvi"]
+font_color = Color(1, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_73c72"]
+font_color = Color(1, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_o2pnv"]
+font_size = 20
+
+[sub_resource type="AudioStreamWAV" id="AudioStreamWAV_3onpd"]
+format = 1
+
+[node name="ConsoleWindow" type="Window"]
+title = "ai-penguins console"
+initial_position = 1
+size = Vector2i(1500, 1000)
+content_scale_mode = 2
+theme = SubResource("Theme_khyp4")
+
+[node name="3dSceneDisplay" type="TextureRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+expand_mode = 3
+stretch_mode = 5
+script = ExtResource("1_pljof")
+
+[node name="MainContainer" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 4
+theme_override_constants/margin_top = 4
+theme_override_constants/margin_right = 4
+theme_override_constants/margin_bottom = 4
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MainContainer"]
+layout_mode = 2
+
+[node name="VBoxContianer" type="VBoxContainer" parent="MainContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MainContainer/HBoxContainer/VBoxContianer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="InferenceStatsChartsContainer" type="PanelContainer" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_j55vy")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer/InferenceStatsChartsContainer"]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer/InferenceStatsChartsContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Inference Stats"
+label_settings = ExtResource("2_q71cg")
+
+[node name="FeedPromptDurChart" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer/InferenceStatsChartsContainer/VBoxContainer" instance=ExtResource("3_6g0mc")]
+layout_mode = 2
+size_flags_horizontal = 1
+
+[node name="PredictDurChart" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer/InferenceStatsChartsContainer/VBoxContainer" instance=ExtResource("3_6g0mc")]
+layout_mode = 2
+
+[node name="PerTokenDurChart" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer/InferenceStatsChartsContainer/VBoxContainer" instance=ExtResource("3_6g0mc")]
+layout_mode = 2
+
+[node name="CurrentStateContainer" type="PanelContainer" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer/CurrentStateContainer"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer/CurrentStateContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TitleLabel" type="Label" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer/CurrentStateContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+text = "Current State"
+label_settings = SubResource("LabelSettings_07s2n")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer/CurrentStateContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="GeneralStateContainer" type="VBoxContainer" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer/CurrentStateContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("5_cmlc3")
+
+[node name="TitleLabel" type="Label" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer/CurrentStateContainer/HBoxContainer/VBoxContainer/HBoxContainer/GeneralStateContainer"]
+layout_mode = 2
+text = "General State"
+label_settings = SubResource("LabelSettings_sny16")
+
+[node name="ConnectionStateContainer" type="VBoxContainer" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer/CurrentStateContainer/HBoxContainer/VBoxContainer/HBoxContainer/GeneralStateContainer"]
+layout_mode = 2
+
+[node name="TextGenContainer" type="HBoxContainer" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer/CurrentStateContainer/HBoxContainer/VBoxContainer/HBoxContainer/GeneralStateContainer/ConnectionStateContainer"]
+layout_mode = 2
+theme_override_constants/separation = 58
+
+[node name="Label" type="Label" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer/CurrentStateContainer/HBoxContainer/VBoxContainer/HBoxContainer/GeneralStateContainer/ConnectionStateContainer/TextGenContainer"]
+layout_mode = 2
+text = "TextGen:"
+
+[node name="StateLabel" type="Label" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer/CurrentStateContainer/HBoxContainer/VBoxContainer/HBoxContainer/GeneralStateContainer/ConnectionStateContainer/TextGenContainer"]
+layout_mode = 2
+text = "Not Connected"
+label_settings = SubResource("LabelSettings_wqpvi")
+
+[node name="ReconnectTextGenButton" type="Button" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer/CurrentStateContainer/HBoxContainer/VBoxContainer/HBoxContainer/GeneralStateContainer/ConnectionStateContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Reconnect TextGen"
+
+[node name="TtsContainer" type="HBoxContainer" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer/CurrentStateContainer/HBoxContainer/VBoxContainer/HBoxContainer/GeneralStateContainer/ConnectionStateContainer"]
+layout_mode = 2
+theme_override_constants/separation = 15
+
+[node name="Label" type="Label" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer/CurrentStateContainer/HBoxContainer/VBoxContainer/HBoxContainer/GeneralStateContainer/ConnectionStateContainer/TtsContainer"]
+layout_mode = 2
+text = "TTS (FakeYou):"
+
+[node name="StateLabel" type="Label" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer/CurrentStateContainer/HBoxContainer/VBoxContainer/HBoxContainer/GeneralStateContainer/ConnectionStateContainer/TtsContainer"]
+layout_mode = 2
+text = "Not Connected"
+label_settings = SubResource("LabelSettings_73c72")
+
+[node name="ReconnectTtsButton" type="Button" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer/CurrentStateContainer/HBoxContainer/VBoxContainer/HBoxContainer/GeneralStateContainer/ConnectionStateContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+text = "Reconnect TTS"
+
+[node name="ControlsContainer" type="VBoxContainer" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer/CurrentStateContainer/HBoxContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("4_28vps")
+
+[node name="TitleLabel" type="Label" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer/CurrentStateContainer/HBoxContainer/VBoxContainer/HBoxContainer/ControlsContainer"]
+layout_mode = 2
+text = "Controls"
+label_settings = SubResource("LabelSettings_o2pnv")
+
+[node name="VisControlsContainer" type="VBoxContainer" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer/CurrentStateContainer/HBoxContainer/VBoxContainer/HBoxContainer/ControlsContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer/CurrentStateContainer/HBoxContainer/VBoxContainer/HBoxContainer/ControlsContainer/VisControlsContainer"]
+layout_mode = 2
+text = "Visual state controls"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer/CurrentStateContainer/HBoxContainer/VBoxContainer/HBoxContainer/ControlsContainer/VisControlsContainer"]
+layout_mode = 2
+
+[node name="ResetCamButton" type="Button" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer/CurrentStateContainer/HBoxContainer/VBoxContainer/HBoxContainer/ControlsContainer/VisControlsContainer/VBoxContainer"]
+layout_mode = 2
+text = "Reset Camera Position"
+
+[node name="ResetPengsButton" type="Button" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer/CurrentStateContainer/HBoxContainer/VBoxContainer/HBoxContainer/ControlsContainer/VisControlsContainer/VBoxContainer"]
+layout_mode = 2
+text = "Reset Penguins"
+
+[node name="LocalQueueControlsContainer" type="VBoxContainer" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer/CurrentStateContainer/HBoxContainer/VBoxContainer/HBoxContainer/ControlsContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer/CurrentStateContainer/HBoxContainer/VBoxContainer/HBoxContainer/ControlsContainer/LocalQueueControlsContainer"]
+layout_mode = 2
+text = "Local queue controls"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer/CurrentStateContainer/HBoxContainer/VBoxContainer/HBoxContainer/ControlsContainer/LocalQueueControlsContainer"]
+layout_mode = 2
+
+[node name="ResetTextGenButton" type="Button" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer/CurrentStateContainer/HBoxContainer/VBoxContainer/HBoxContainer/ControlsContainer/LocalQueueControlsContainer/VBoxContainer"]
+layout_mode = 2
+text = "Reset Current Text Gen"
+
+[node name="ResetTtsDialogueButton" type="Button" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer/CurrentStateContainer/HBoxContainer/VBoxContainer/HBoxContainer/ControlsContainer/LocalQueueControlsContainer/VBoxContainer"]
+layout_mode = 2
+text = "Reset Current TTS Dialogue"
+
+[node name="CurrentGenStatesContainer" type="VBoxContainer" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer/CurrentStateContainer/HBoxContainer"]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer/CurrentStateContainer/HBoxContainer/CurrentGenStatesContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Current Generation States"
+label_settings = ExtResource("2_q71cg")
+
+[node name="CurrentTopicGenStateContainer" type="VBoxContainer" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer/CurrentStateContainer/HBoxContainer/CurrentGenStatesContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("4_6hu1a")
+
+[node name="Label" type="Label" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer/CurrentStateContainer/HBoxContainer/CurrentGenStatesContainer/CurrentTopicGenStateContainer"]
+layout_mode = 2
+text = "Current TextGen Topic:"
+
+[node name="CurrTopicText" type="TextEdit" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer/CurrentStateContainer/HBoxContainer/CurrentGenStatesContainer/CurrentTopicGenStateContainer"]
+layout_mode = 2
+placeholder_text = "No topic being executed."
+editable = false
+wrap_mode = 1
+scroll_fit_content_height = true
+
+[node name="Label2" type="Label" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer/CurrentStateContainer/HBoxContainer/CurrentGenStatesContainer/CurrentTopicGenStateContainer"]
+layout_mode = 2
+text = "Generated Lines:"
+
+[node name="GenLinesText" type="TextEdit" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer/CurrentStateContainer/HBoxContainer/CurrentGenStatesContainer/CurrentTopicGenStateContainer"]
+custom_minimum_size = Vector2(2.08165e-12, 150)
+layout_mode = 2
+size_flags_vertical = 3
+placeholder_text = "No lines generated yet."
+editable = false
+wrap_mode = 1
+
+[node name="CurrentTTSStateContainer" type="VBoxContainer" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer/CurrentStateContainer/HBoxContainer/CurrentGenStatesContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("5_83v4c")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer/CurrentStateContainer/HBoxContainer/CurrentGenStatesContainer/CurrentTTSStateContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer/CurrentStateContainer/HBoxContainer/CurrentGenStatesContainer/CurrentTTSStateContainer/HBoxContainer"]
+layout_mode = 2
+text = "Current TTS Dialogue Id:"
+
+[node name="DialogueIdLine" type="LineEdit" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer/CurrentStateContainer/HBoxContainer/CurrentGenStatesContainer/CurrentTTSStateContainer/HBoxContainer"]
+layout_mode = 2
+placeholder_text = "None"
+editable = false
+
+[node name="Label" type="Label" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer/CurrentStateContainer/HBoxContainer/CurrentGenStatesContainer/CurrentTTSStateContainer"]
+layout_mode = 2
+text = "Current TTS Line Processed:"
+
+[node name="ProcessedLineText" type="TextEdit" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer/CurrentStateContainer/HBoxContainer/CurrentGenStatesContainer/CurrentTTSStateContainer"]
+custom_minimum_size = Vector2(2.08165e-12, 100)
+layout_mode = 2
+size_flags_vertical = 3
+placeholder_text = "No line being processed by TTS."
+editable = false
+wrap_mode = 1
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MainContainer/HBoxContainer/VBoxContianer"]
+custom_minimum_size = Vector2(2.08165e-12, 300)
+layout_mode = 2
+
+[node name="TextGenEnqueuedContainer" type="PanelContainer" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer2"]
+custom_minimum_size = Vector2(325, 2.08165e-12)
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("5_hg1v2")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer2/TextGenEnqueuedContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer2/TextGenEnqueuedContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer2/TextGenEnqueuedContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Text Gen. Queue"
+label_settings = ExtResource("2_q71cg")
+
+[node name="Button" type="Button" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer2/TextGenEnqueuedContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Remove Selected"
+
+[node name="EnqueuedList" type="ItemList" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer2/TextGenEnqueuedContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+select_mode = 1
+max_text_lines = 2
+
+[node name="EnqueuePromptContainer" type="HBoxContainer" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer2/TextGenEnqueuedContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="LineEdit" type="LineEdit" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer2/TextGenEnqueuedContainer/VBoxContainer/EnqueuePromptContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Enter prompt text"
+
+[node name="SubmitButton" type="Button" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer2/TextGenEnqueuedContainer/VBoxContainer/EnqueuePromptContainer"]
+layout_mode = 2
+size_flags_vertical = 8
+text = "Enqueue"
+
+[node name="PresentQueueContainer" type="PanelContainer" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer2"]
+custom_minimum_size = Vector2(325, 2.08165e-12)
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("8_qt81x")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer2/PresentQueueContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer2/PresentQueueContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer2/PresentQueueContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Present Queue"
+label_settings = ExtResource("2_q71cg")
+
+[node name="Button" type="Button" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer2/PresentQueueContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Remove Selected"
+
+[node name="EnqueuedList" type="ItemList" parent="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer2/PresentQueueContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+select_mode = 1
+max_text_lines = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TopicsReadyForTTSContainer" type="PanelContainer" parent="MainContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("6_37uhp")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainContainer/HBoxContainer/VBoxContainer/TopicsReadyForTTSContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MainContainer/HBoxContainer/VBoxContainer/TopicsReadyForTTSContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="TitleLabel" type="Label" parent="MainContainer/HBoxContainer/VBoxContainer/TopicsReadyForTTSContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Topics Ready for TTS"
+label_settings = ExtResource("2_q71cg")
+
+[node name="AutoAcceptButton" type="CheckButton" parent="MainContainer/HBoxContainer/VBoxContainer/TopicsReadyForTTSContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Auto-accept"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MainContainer/HBoxContainer/VBoxContainer/TopicsReadyForTTSContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="TopicsList" type="ItemList" parent="MainContainer/HBoxContainer/VBoxContainer/TopicsReadyForTTSContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TopicDetailsContainer" type="VBoxContainer" parent="MainContainer/HBoxContainer/VBoxContainer/TopicsReadyForTTSContainer/VBoxContainer/HBoxContainer"]
+visible = false
+custom_minimum_size = Vector2(300, 2.08165e-12)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MainContainer/HBoxContainer/VBoxContainer/TopicsReadyForTTSContainer/VBoxContainer/HBoxContainer/TopicDetailsContainer"]
+layout_mode = 2
+text = "Parsed Script:"
+
+[node name="DialogueScriptText" type="TextEdit" parent="MainContainer/HBoxContainer/VBoxContainer/TopicsReadyForTTSContainer/VBoxContainer/HBoxContainer/TopicDetailsContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+placeholder_text = "No script available."
+editable = false
+
+[node name="Label3" type="Label" parent="MainContainer/HBoxContainer/VBoxContainer/TopicsReadyForTTSContainer/VBoxContainer/HBoxContainer/TopicDetailsContainer"]
+layout_mode = 2
+text = "Raw Lines:"
+
+[node name="DialogueRawLinesText" type="TextEdit" parent="MainContainer/HBoxContainer/VBoxContainer/TopicsReadyForTTSContainer/VBoxContainer/HBoxContainer/TopicDetailsContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+placeholder_text = "No raw lines available."
+editable = false
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MainContainer/HBoxContainer/VBoxContainer/TopicsReadyForTTSContainer/VBoxContainer/HBoxContainer/TopicDetailsContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+alignment = 1
+
+[node name="RemoveButton" type="Button" parent="MainContainer/HBoxContainer/VBoxContainer/TopicsReadyForTTSContainer/VBoxContainer/HBoxContainer/TopicDetailsContainer/HBoxContainer"]
+layout_mode = 2
+text = "Remove"
+
+[node name="ApproveButton" type="Button" parent="MainContainer/HBoxContainer/VBoxContainer/TopicsReadyForTTSContainer/VBoxContainer/HBoxContainer/TopicDetailsContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+text = "Approve"
+
+[node name="TopicsReadyForPresentContainer" type="PanelContainer" parent="MainContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+script = ExtResource("7_7jc5e")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainContainer/HBoxContainer/VBoxContainer/TopicsReadyForPresentContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MainContainer/HBoxContainer/VBoxContainer/TopicsReadyForPresentContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="TitleLabel" type="Label" parent="MainContainer/HBoxContainer/VBoxContainer/TopicsReadyForPresentContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Dialogues Ready for Present"
+label_settings = ExtResource("2_q71cg")
+
+[node name="AutoAcceptButton" type="CheckButton" parent="MainContainer/HBoxContainer/VBoxContainer/TopicsReadyForPresentContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+text = "Auto-accept"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MainContainer/HBoxContainer/VBoxContainer/TopicsReadyForPresentContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="DialoguesList" type="ItemList" parent="MainContainer/HBoxContainer/VBoxContainer/TopicsReadyForPresentContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DialogueDetailsContainer" type="VBoxContainer" parent="MainContainer/HBoxContainer/VBoxContainer/TopicsReadyForPresentContainer/VBoxContainer/HBoxContainer"]
+visible = false
+custom_minimum_size = Vector2(300, 2.08165e-12)
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MainContainer/HBoxContainer/VBoxContainer/TopicsReadyForPresentContainer/VBoxContainer/HBoxContainer/DialogueDetailsContainer"]
+layout_mode = 2
+text = "Script:"
+
+[node name="DialogueScriptText" type="TextEdit" parent="MainContainer/HBoxContainer/VBoxContainer/TopicsReadyForPresentContainer/VBoxContainer/HBoxContainer/DialogueDetailsContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+placeholder_text = "No script available."
+editable = false
+
+[node name="Label2" type="Label" parent="MainContainer/HBoxContainer/VBoxContainer/TopicsReadyForPresentContainer/VBoxContainer/HBoxContainer/DialogueDetailsContainer"]
+layout_mode = 2
+text = "Voice lines:"
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MainContainer/HBoxContainer/VBoxContainer/TopicsReadyForPresentContainer/VBoxContainer/HBoxContainer/DialogueDetailsContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainContainer/HBoxContainer/VBoxContainer/TopicsReadyForPresentContainer/VBoxContainer/HBoxContainer/DialogueDetailsContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VoiceLineContainer" parent="MainContainer/HBoxContainer/VBoxContainer/TopicsReadyForPresentContainer/VBoxContainer/HBoxContainer/DialogueDetailsContainer/ScrollContainer/VBoxContainer" instance=ExtResource("10_760q5")]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MainContainer/HBoxContainer/VBoxContainer/TopicsReadyForPresentContainer/VBoxContainer/HBoxContainer/DialogueDetailsContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+alignment = 1
+
+[node name="RemoveButton" type="Button" parent="MainContainer/HBoxContainer/VBoxContainer/TopicsReadyForPresentContainer/VBoxContainer/HBoxContainer/DialogueDetailsContainer/HBoxContainer"]
+layout_mode = 2
+text = "Remove"
+
+[node name="ApproveButton" type="Button" parent="MainContainer/HBoxContainer/VBoxContainer/TopicsReadyForPresentContainer/VBoxContainer/HBoxContainer/DialogueDetailsContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+text = "Approve"
+
+[node name="TestDialoguePlayer" type="AudioStreamPlayer" parent="." groups=["g_test_dialogue_player"]]
+stream = SubResource("AudioStreamWAV_3onpd")
+pitch_scale = 0.73
+
+[connection signal="pressed" from="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer/CurrentStateContainer/HBoxContainer/VBoxContainer/HBoxContainer/GeneralStateContainer/ConnectionStateContainer/ReconnectTextGenButton" to="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer/CurrentStateContainer/HBoxContainer/VBoxContainer/HBoxContainer/GeneralStateContainer" method="_on_reconnect_text_gen_button_pressed"]
+[connection signal="pressed" from="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer/CurrentStateContainer/HBoxContainer/VBoxContainer/HBoxContainer/GeneralStateContainer/ConnectionStateContainer/ReconnectTtsButton" to="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer/CurrentStateContainer/HBoxContainer/VBoxContainer/HBoxContainer/GeneralStateContainer" method="_on_reconnect_tts_button_pressed"]
+[connection signal="pressed" from="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer/CurrentStateContainer/HBoxContainer/VBoxContainer/HBoxContainer/ControlsContainer/VisControlsContainer/VBoxContainer/ResetCamButton" to="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer/CurrentStateContainer/HBoxContainer/VBoxContainer/HBoxContainer/ControlsContainer" method="_on_reset_cam_button_pressed"]
+[connection signal="pressed" from="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer/CurrentStateContainer/HBoxContainer/VBoxContainer/HBoxContainer/ControlsContainer/VisControlsContainer/VBoxContainer/ResetPengsButton" to="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer/CurrentStateContainer/HBoxContainer/VBoxContainer/HBoxContainer/ControlsContainer" method="_on_reset_pengs_button_pressed"]
+[connection signal="pressed" from="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer/CurrentStateContainer/HBoxContainer/VBoxContainer/HBoxContainer/ControlsContainer/LocalQueueControlsContainer/VBoxContainer/ResetTextGenButton" to="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer/CurrentStateContainer/HBoxContainer/VBoxContainer/HBoxContainer/ControlsContainer" method="_on_reset_text_gen_button_pressed"]
+[connection signal="pressed" from="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer/CurrentStateContainer/HBoxContainer/VBoxContainer/HBoxContainer/ControlsContainer/LocalQueueControlsContainer/VBoxContainer/ResetTtsDialogueButton" to="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer/CurrentStateContainer/HBoxContainer/VBoxContainer/HBoxContainer/ControlsContainer" method="_on_reset_tts_dialogue_button_pressed"]
+[connection signal="pressed" from="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer2/TextGenEnqueuedContainer/VBoxContainer/HBoxContainer/Button" to="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer2/TextGenEnqueuedContainer" method="_on_remove_button_pressed"]
+[connection signal="text_submitted" from="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer2/TextGenEnqueuedContainer/VBoxContainer/EnqueuePromptContainer/LineEdit" to="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer2/TextGenEnqueuedContainer" method="_on_prompt_entry_text_submitted"]
+[connection signal="pressed" from="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer2/TextGenEnqueuedContainer/VBoxContainer/EnqueuePromptContainer/SubmitButton" to="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer2/TextGenEnqueuedContainer" method="_on_submit_button_pressed"]
+[connection signal="pressed" from="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer2/PresentQueueContainer/VBoxContainer/HBoxContainer/Button" to="MainContainer/HBoxContainer/VBoxContianer/HBoxContainer2/PresentQueueContainer" method="_on_remove_button_pressed"]
+[connection signal="pressed" from="MainContainer/HBoxContainer/VBoxContainer/TopicsReadyForTTSContainer/VBoxContainer/HBoxContainer/TopicDetailsContainer/HBoxContainer/RemoveButton" to="MainContainer/HBoxContainer/VBoxContainer/TopicsReadyForTTSContainer" method="_on_remove_button_pressed"]
+[connection signal="pressed" from="MainContainer/HBoxContainer/VBoxContainer/TopicsReadyForTTSContainer/VBoxContainer/HBoxContainer/TopicDetailsContainer/HBoxContainer/ApproveButton" to="MainContainer/HBoxContainer/VBoxContainer/TopicsReadyForTTSContainer" method="_on_approve_button_pressed"]
+[connection signal="pressed" from="MainContainer/HBoxContainer/VBoxContainer/TopicsReadyForPresentContainer/VBoxContainer/HBoxContainer/DialogueDetailsContainer/HBoxContainer/RemoveButton" to="MainContainer/HBoxContainer/VBoxContainer/TopicsReadyForPresentContainer" method="_on_remove_button_pressed"]
+[connection signal="pressed" from="MainContainer/HBoxContainer/VBoxContainer/TopicsReadyForPresentContainer/VBoxContainer/HBoxContainer/DialogueDetailsContainer/HBoxContainer/ApproveButton" to="MainContainer/HBoxContainer/VBoxContainer/TopicsReadyForPresentContainer" method="_on_approve_button_pressed"]

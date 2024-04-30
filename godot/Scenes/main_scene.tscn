@@ -1,0 +1,62 @@
+[gd_scene load_steps=9 format=3 uid="uid://cp860ljbeeyio"]
+
+[ext_resource type="PackedScene" uid="uid://dobxia2t80821" path="res://Scenes/3d_scene.tscn" id="1_0fghc"]
+[ext_resource type="Script" path="res://Scripts/dialogue_text_generation.gd" id="1_gyr3c"]
+[ext_resource type="Script" path="res://Scripts/save_load_manager.gd" id="2_lh6gw"]
+[ext_resource type="Script" path="res://Scripts/dialogue_creation_manager.gd" id="2_rsisv"]
+[ext_resource type="Script" path="res://Scripts/dialogue_speech_generation.gd" id="3_788fr"]
+[ext_resource type="Script" path="res://Scripts/presentation_manager.gd" id="4_oe5wn"]
+[ext_resource type="Script" path="res://Scripts/presentation_executor.gd" id="5_3ocsl"]
+
+[sub_resource type="AudioStreamWAV" id="AudioStreamWAV_hi38d"]
+format = 1
+
+[node name="MainScene" type="Node3D"]
+
+[node name="ViewportCanvas" type="CanvasLayer" parent="."]
+
+[node name="Control" type="Control" parent="ViewportCanvas"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="ViewportCanvas/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+stretch = true
+
+[node name="3dSceneViewport" type="SubViewport" parent="ViewportCanvas/Control/SubViewportContainer" groups=["g_scene_viewport"]]
+handle_input_locally = false
+size = Vector2i(1920, 1080)
+render_target_update_mode = 4
+
+[node name="3dScene" parent="ViewportCanvas/Control/SubViewportContainer/3dSceneViewport" instance=ExtResource("1_0fghc")]
+
+[node name="SaveLoadManager" type="Node" parent="."]
+script = ExtResource("2_lh6gw")
+
+[node name="DialogueTextGeneration" type="Node" parent="." groups=["g_dialogue_text_gen"]]
+script = ExtResource("1_gyr3c")
+
+[node name="PresentationExecutor" type="Node" parent="."]
+script = ExtResource("5_3ocsl")
+
+[node name="PresentationManager" type="Node" parent="." groups=["g_presentation_man"]]
+script = ExtResource("4_oe5wn")
+
+[node name="DialogueSpeechGeneration" type="Node" parent="." groups=["g_dialogue_speech_gen"]]
+script = ExtResource("3_788fr")
+
+[node name="DialogueCreationManager" type="Node" parent="." groups=["g_dialogue_creation_man"]]
+script = ExtResource("2_rsisv")
+
+[node name="DialogueVoicePlayer" type="AudioStreamPlayer" parent="." groups=["g_dialogue_voice_player"]]
+stream = SubResource("AudioStreamWAV_hi38d")
+pitch_scale = 0.73

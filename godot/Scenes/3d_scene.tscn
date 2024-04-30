@@ -1,0 +1,177 @@
+[gd_scene load_steps=25 format=3 uid="uid://dobxia2t80821"]
+
+[ext_resource type="Script" path="res://Scripts/penguins.gd" id="1_jic02"]
+[ext_resource type="PackedScene" uid="uid://c2a2krg6oa2cf" path="res://Scenes/Characters/rico.tscn" id="2_62kgj"]
+[ext_resource type="PackedScene" uid="uid://dxm6uohajgq82" path="res://Scenes/Characters/kowalski.tscn" id="3_dowx8"]
+[ext_resource type="PackedScene" uid="uid://djr6nx3gl7gip" path="res://Scenes/Characters/private.tscn" id="4_dw820"]
+[ext_resource type="PackedScene" uid="uid://dbyoxuck8q5k0" path="res://Scenes/Characters/skipper.tscn" id="5_s2iy6"]
+[ext_resource type="Script" path="res://Scripts/camera.gd" id="6_sk6e5"]
+[ext_resource type="Shader" path="res://Assets/Shaders/sky.gdshader" id="7_xye7a"]
+[ext_resource type="Texture2D" uid="uid://bhrg2tayi5dgb" path="res://Assets/realistic_central_park_zoo_city_scape.jpeg" id="8_akneg"]
+[ext_resource type="Script" path="res://Scripts/wander_area.gd" id="9_7vs3q"]
+[ext_resource type="PackedScene" uid="uid://dsvbsl0gkm1d2" path="res://Assets/Models/penguin_enc.blend" id="10_7b7e6"]
+[ext_resource type="Shader" path="res://Assets/Shaders/water.gdshader" id="11_e1ysx"]
+[ext_resource type="PackedScene" uid="uid://bty6v40nl1j8y" path="res://Assets/Models/lamp_post.glb" id="12_5r5wx"]
+[ext_resource type="PackedScene" uid="uid://dmnxy4q32eb21" path="res://Assets/Models/park_floor.blend" id="13_n83xp"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_i3y5m"]
+font_size = 70
+outline_size = 15
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fgj58"]
+shader = ExtResource("7_xye7a")
+shader_parameter/add_clouds = true
+shader_parameter/clouds_below = false
+shader_parameter/cloud_scale = 0.64
+shader_parameter/speed = 0.002
+shader_parameter/cloud_dark = 0.5
+shader_parameter/cloud_light = 0.3
+shader_parameter/cloud_cover = 0.2
+shader_parameter/cloud_alpha = 8.0
+shader_parameter/sky_tint = 0.5
+shader_parameter/height_offset = 0.2
+shader_parameter/sky_contribution = 0.5
+shader_parameter/source_panorama = ExtResource("8_akneg")
+
+[sub_resource type="Sky" id="Sky_qsake"]
+sky_material = SubResource("ShaderMaterial_fgj58")
+
+[sub_resource type="Environment" id="Environment_pjfwf"]
+background_mode = 2
+sky = SubResource("Sky_qsake")
+sdfgi_use_occlusion = true
+volumetric_fog_density = 0.004
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_b0tye"]
+size = Vector3(130, 1, 180)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_h3qs2"]
+noise_type = 3
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_56kxg"]
+in_3d_space = true
+noise = SubResource("FastNoiseLite_h3qs2")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_l40dh"]
+noise_type = 0
+metadata/_preview_in_3d_space_ = true
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_klrag"]
+in_3d_space = true
+seamless = true
+as_normal_map = true
+noise = SubResource("FastNoiseLite_l40dh")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mti01"]
+render_priority = 0
+shader = ExtResource("11_e1ysx")
+shader_parameter/speed = 4.75e-08
+shader_parameter/color = Color(0.6, 0.831373, 1, 0.227451)
+shader_parameter/edge_color = Color(1, 1, 1, 1)
+shader_parameter/edge_scale = 0.25
+shader_parameter/near = 0.1
+shader_parameter/far = 100.0
+shader_parameter/wave_strengh = Vector2(0.12, 0.06)
+shader_parameter/wave_frequency = Vector2(12, 12)
+shader_parameter/time_factor = Vector2(1, 2)
+shader_parameter/noise1 = SubResource("NoiseTexture2D_56kxg")
+shader_parameter/normalmap = SubResource("NoiseTexture2D_klrag")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_bwp5m"]
+material = SubResource("ShaderMaterial_mti01")
+size = Vector2(258, 320)
+
+[node name="3dScene" type="Node3D"]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 30
+theme_override_constants/margin_right = 30
+theme_override_constants/margin_bottom = 50
+
+[node name="Label" type="Label" parent="CanvasLayer/MarginContainer" groups=["g_subtitles_label"]]
+layout_mode = 2
+size_flags_vertical = 8
+label_settings = SubResource("LabelSettings_i3y5m")
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="Penguins" type="Node3D" parent="." groups=["g_penguin_man"]]
+script = ExtResource("1_jic02")
+
+[node name="rico" parent="Penguins" instance=ExtResource("2_62kgj")]
+transform = Transform3D(-0.863228, 0, 0.504814, 0, 1, 0, -0.504814, 0, -0.863228, -68.2601, 24.7594, 46.3447)
+
+[node name="kowalski" parent="Penguins" instance=ExtResource("3_dowx8")]
+transform = Transform3D(0.979364, 0, 0.202103, 0, 1, 0, -0.202103, 0, 0.979364, -67.6009, 61.0173, 47.2278)
+
+[node name="private" parent="Penguins" instance=ExtResource("4_dw820")]
+transform = Transform3D(-0.999951, 0, -0.00996576, 0, 1, 0, 0.00996572, 0, -0.999951, -65.7902, 46.8597, 50.3231)
+
+[node name="skipper" parent="Penguins" instance=ExtResource("5_s2iy6")]
+transform = Transform3D(-0.988601, 0, -0.150553, 0, 1, 0, 0.150553, 0, -0.988601, -67.3118, 79.9046, 44.0114)
+
+[node name="SpawnBounds" type="Node3D" parent="Penguins"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 25, 2.08165e-12)
+
+[node name="bottom_right" type="Marker3D" parent="Penguins/SpawnBounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31.1328, 0, -51.3612)
+gizmo_extents = 3.0
+
+[node name="top_left" type="Marker3D" parent="Penguins/SpawnBounds"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 29.3944, 0, 52.3094)
+gizmo_extents = 3.0
+
+[node name="Camera3D" type="Camera3D" parent="." groups=["g_camera"]]
+transform = Transform3D(1, -4.68079e-16, 3.27753e-16, 3.27752e-16, 0.939693, 0.34202, -4.68079e-16, -0.34202, 0.939693, 2.08165e-12, 50, 120)
+current = true
+script = ExtResource("6_sk6e5")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.617065, 0.706814, -0.345896, 0.208755, 0.570847, 0.794075, 0.758717, 0.417789, -0.499801, 25.9691, 64.9832, -89.805)
+shadow_enabled = true
+directional_shadow_mode = 0
+directional_shadow_max_distance = 500.0
+sky_mode = 1
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_pjfwf")
+
+[node name="WanderArea" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.86406, 23.7807, 2.51723)
+script = ExtResource("9_7vs3q")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WanderArea"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.11899, 0)
+shape = SubResource("BoxShape3D_b0tye")
+
+[node name="Environment" type="Node3D" parent="."]
+
+[node name="penguin_enc" parent="Environment" instance=ExtResource("10_7b7e6")]
+
+[node name="Water" type="MeshInstance3D" parent="Environment"]
+mesh = SubResource("PlaneMesh_bwp5m")
+skeleton = NodePath("../../../../../..")
+
+[node name="LampPosts" type="Node3D" parent="Environment"]
+
+[node name="lamp_post" parent="Environment/LampPosts" instance=ExtResource("12_5r5wx")]
+transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, -128.697, 15.403, -160.287)
+
+[node name="lamp_post2" parent="Environment/LampPosts" instance=ExtResource("12_5r5wx")]
+transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, 129.09, 15.403, -160.287)
+
+[node name="lamp_post3" parent="Environment/LampPosts" instance=ExtResource("12_5r5wx")]
+transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, 129.09, 15.403, 159.369)
+
+[node name="lamp_post4" parent="Environment/LampPosts" instance=ExtResource("12_5r5wx")]
+transform = Transform3D(1.3, 0, 0, 0, 1.3, 0, 0, 0, 1.3, -128.915, 15.403, 159.369)
+
+[node name="park_floor" parent="Environment" instance=ExtResource("13_n83xp")]

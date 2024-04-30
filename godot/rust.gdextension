@@ -1,0 +1,13 @@
+[configuration]
+entry_symbol = "gdext_rust_init"
+compatibility_minimum = 4.1
+
+[libraries]
+linux.debug.x86_64 = 		"res://../rust/target/debug/libai_penguins.so"
+linux.release.x86_64 = 		"res://../rust/target/release/libai_penguins.so"
+windows.debug.x86_64 = 		"res://../rust/target/debug/ai_penguins.dll"
+windows.release.x86_64 = 	"res://../rust/target/release/ai_penguins.dll"
+macos.debug = 			"res://../rust/target/debug/libai_penguins.dylib"
+macos.release = 		"res://../rust/target/release/libai_penguins.dylib"
+macos.debug.arm64 = 		"res://../rust/target/debug/libai_penguins.dylib"
+macos.release.arm64 = 		"res://../rust/target/release/libai_penguins.dylib"
