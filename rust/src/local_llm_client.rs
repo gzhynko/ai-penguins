@@ -41,7 +41,7 @@ impl LocalLlmClient {
 
         let (handler, listener) = node::split::<()>();
 
-        let server_addr = "127.0.0.1:5341";
+        let server_addr = dotenvy::var("LMM_SERVER_ADDR").unwrap();
         let (server_endpoint, _) = handler.network().connect(Transport::FramedTcp, server_addr).unwrap();
 
         let handler_sender_loop = handler.clone();

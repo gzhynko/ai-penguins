@@ -19,6 +19,9 @@ struct RustTextAiExecutor {
 impl INode for RustTextAiExecutor {
     fn init(base: Base<Node>) -> Self {
         let llm_client = LocalLlmClient::new();
+        if let Err(e) = dotenvy::dotenv() {
+            godot_error!("[rust] Unable to load env vars: {e}");
+        }
 
         Self {
             llm_client,
